@@ -1,0 +1,10 @@
+{
+  "project": "Local AI Email Auto-Responder",
+  "status": "completed",
+  "tools": [
+    "n8n",
+    "Ollama",
+    "Docker"
+  ],
+  "model": "tinyllama"
+}

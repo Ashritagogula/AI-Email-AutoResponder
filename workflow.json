@@ -1,0 +1,150 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a3dd58bb-304c-4082-9223-87374dd3ab36",
+      "name": "Email Trigger (IMAP)",
+      "credentials": {
+        "imap": {
+          "id": "zJ6n66byXXLmEg2n",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "84b65ee9-ec32-4ab1-9a9d-b731e9a56086",
+              "leftValue": "={{$json.from.address}}",
+              "rightValue": "ashritagogula12@gmail.com",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bde23e3d-ae7f-4df9-9903-d46016fbc2b3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ollama:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"tinyllama\",\n  \"stream\": false,\n  \"prompt\": \"Hello from n8n\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "19675cd0-d3b3-4b8e-b357-22d2d161d97f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fromEmail": "ashritagogula12@gmail.com",
+        "toEmail": "{{$json.from.address}}",
+        "subject": "=Re: {{$json.subject}}",
+        "emailFormat": "text",
+        "text": "={{$node[\"HTTP Request\"].json.response}}",
+        "options": {
+          "replyTo": "={{$json.messageId}}"
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        402.2890625,
+        -96
+      ],
+      "id": "5c40cd4c-d22a-4c41-99dd-92fd67297be2",
+      "name": "Send an Email",
+      "webhookId": "653c0044-b227-4031-92d0-adc0f2db7479",
+      "credentials": {
+        "smtp": {
+          "id": "zHPZy4yDKIn8vSSr",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9ca0e7cc-d98f-40c8-a80b-a8b167bb41cd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d76fed6f5c25f4406f3c2dafa332aa6832343257031e15c1149f6bab63dab2a9"
+  },
+  "id": "wMkxDJuPWEXmBZBl",
+  "tags": []
+}
