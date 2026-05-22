@@ -70,4 +70,4 @@ EMAIL_USER=your_email@gmail.com
 EMAIL_APP_PASSWORD=your_app_password
 SMTP_HOST=smtp.gmail.com
 IMAP_HOST=imap.gmail.com
-OLLAMA_MODEL=tinyllama
+OLLAMA_MODEL=tinyllama"Project setup completed successfully" 
